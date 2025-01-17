@@ -19,11 +19,11 @@ def classify_file(file_path):
             return "Unsupported file format", None
 
         if 'UID' in df.columns and 'Timestamp' in df.columns:
-            return "Sales Record", df.head()
+            return "Sales Record", df
         elif any(df.apply(lambda row: row.astype(str).str.contains('INFO|ERROR|DEBUG').any(), axis=1)):
-            return "Log File", df.head()
+            return "Log File", df
         else:
-            return "Unknown", df.head()
+            return "Unknown", df
     except Exception as e:
         return f"Error: {str(e)}", None
 
@@ -39,8 +39,7 @@ def upload_file():
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
             file.save(file_path)
             classification, preview = classify_file(file_path)
-            preview_html = preview.to_html(index=False) if preview is not None else ""
-            return render_template('result.html', classification=classification, preview=preview_html)
+            return render_template('result.html', classification=classification, tables = [preview.to_html(classes='pure-table ', header="true")])
     app.logger.info('GET request accessed')
     return render_template('upload.html')
 

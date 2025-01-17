@@ -4,12 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>File Classification Result</title>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.6/build/pure-min.css">
+    <style>
+        body {
+            padding: 20px;
+        }
+        .header, .content, .footer {
+            text-align: center;
+        }
+        .content {
+            margin-top: 20px;
+        }
+        .pure-button {
+            margin-top: 20px;
+        }
+        .container { 
+        display: flex; 
+        align-items: center; 
+  
+        justify-content: center; 
+        flex-direction: column; 
+    } 
+    </style>
 </head>
 <body>
-    <h1>File Classification Result</h1>
-    <p>Classification: {{ classification }}</p>
-    <h2>File Preview:</h2>
-    <div>{{ preview|safe }}</div>
-    <a href="{{ url_for('upload_file') }}">Upload another file</a>
+    <div class="container">
+        <div class="header">
+            <h1>File Classification Result</h1>
+        </div>
+        <div class="content">
+            <p>Classification: 
+                <span style="display: inline-block; padding: 5px 10px; border-radius: 5px; color: white; background-color: {{ 'orange' if classification == 'Unknown' else 'darkgreen' }};">
+                    {{ classification }}
+                </span>
+            </p>
+            <h2>File Preview:</h2>
+            <div class="justify-content">
+                {% for table in tables %}
+                    {{ table|safe }}
+                {% endfor %}
+            </div>
+            <a href="{{ url_for('upload_file') }}" class="pure-button pure-button-primary">Upload another file</a>
+        </div>
+    </div>
 </body>
 </html>
