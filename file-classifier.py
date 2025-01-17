@@ -39,6 +39,12 @@ def upload_file():
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
             file.save(file_path)
             classification, preview = classify_file(file_path)
+
+            # Rename the file
+            new_filename = f"{classification.replace(' ','')}-{file.filename}"
+            new_file_path = os.path.join(app.config['UPLOAD_FOLDER'], new_filename)
+            os.rename(file_path, new_file_path)
+
             return render_template('result.html', classification=classification, tables = [preview.to_html(classes='pure-table ', header="true")])
     app.logger.info('GET request accessed')
     return render_template('upload.html')
